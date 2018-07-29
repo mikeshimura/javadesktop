@@ -47,7 +47,7 @@ public class SeleniumService {
     public HashMap test(HashMap params, HttpServletRequest request,
                                 HttpServletResponse response) {
         String in= (String) params.get("in");
-        return DBFluteUtil.setErrorMessage(in+" が送られました",params);
+        return DBFluteUtil.setErrorMessage(in+" was sent.",params);
     }
 
     public static boolean isWindows() {
