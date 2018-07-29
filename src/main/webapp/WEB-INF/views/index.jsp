@@ -11,6 +11,7 @@
       ArrayList jslib =(ArrayList)((HashMap)request.getAttribute("__jscss")).get("jslib");
   		ArrayList js =(ArrayList)((HashMap)request.getAttribute("__jscss")).get("js");
   		ArrayList css =(ArrayList)((HashMap)request.getAttribute("__jscss")).get("css");
+  			ArrayList tag =(ArrayList)((HashMap)request.getAttribute("__jscss")).get("tag");
   		String title =(String)((HashMap)request.getAttribute("__jscss")).get("title");
   		String jscmdh =(String)((HashMap)request.getAttribute("__jscss")).get("jscmdh");
   %>
@@ -21,8 +22,12 @@
   <% for(Object s:jslib) { %>
   	<script src=<% out.print(s); %>></script> 
   <% } %>
-   <script>
-  <% for(Object s:jscmd) { %>
+
+     <% for(Object s:js) { %>
+     	<script src=<% out.print(s); %>></script>
+     <% } %>
+       <script>
+      <% for(Object s:jscmd) { %>
   <% out.print(s); %>
   <% } %>
   </script>
@@ -31,10 +36,12 @@
   <% } %>  
   <title><% out.print(title); %></title>
 </head>
-<body>
-    <div id="content"></div>
-  <% for(Object s:js) { %>
-  	<script src=<% out.print(s); %>></script> 
+<body onunload="$wa.unload()">
+<content></content>
+    <% for(Object s:tag) { %>
+  	  	<script  type="riot/tag" data-src=<% out.print(s); %>></script>
   <% } %>
+  <script>riot.mount('content') ;riot.update()</script>
 </body>
+
 </html>

@@ -3,15 +3,13 @@ package com.mssoftech.javadesktop.control;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.mssoftech.javadesktop.service.SeleniumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mssoftech.javadesktop.service.LoginService;
-import com.mssoftech.javadesktop.service.SysTableService;
-import com.mssoftech.javadesktop.service.UserTableService;
 import com.mssoftech.javadesktop.util.AppContextUtil;
 import com.mssoftech.web.util.ServiceUtil;
 
@@ -34,45 +32,17 @@ public class AjaxControl {
 
 		return "OK";
 	}
+	@RequestMapping(value = "/test", method = RequestMethod.POST)
+	String test(HttpServletRequest request, HttpServletResponse response,
+					 @RequestBody String str) {
 
-	@RequestMapping(value = "/loginauth", method = RequestMethod.POST)
-	String loginauth(HttpServletRequest request, HttpServletResponse response,
-			@RequestBody String str) {
-
-		return ServiceUtil.invoke(str, request, response, "loginAuth",
-				LoginService.class, appContextUtil);
+		return ServiceUtil.invoke(str, request, response, "test",
+				SeleniumService.class, appContextUtil);
+	}
+	@RequestMapping(value = "/quit", method = RequestMethod.POST)
+	void quit(HttpServletRequest request, HttpServletResponse response,
+					 @RequestBody String str) {
+		System.exit(0);
 	}
 
-	@RequestMapping(value = "/logout", method = RequestMethod.POST)
-	public String logout(HttpServletRequest request,
-			HttpServletResponse response) {
-		String str = "{\"dummy\":\"\"}";
-		return ServiceUtil.invoke(str, request, response, "logout",
-				LoginService.class, appContextUtil);
-
-	}
-
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(HttpServletRequest request,
-			HttpServletResponse response, @RequestBody String str) {
-		return ServiceUtil.invoke(str, request, response, "execute",
-				LoginService.class, appContextUtil);
-
-	}
-	
-	@RequestMapping(value = "/usertbl", method = RequestMethod.POST)
-	public String usertbl(HttpServletRequest request,
-			HttpServletResponse response, @RequestBody String str) {
-		return ServiceUtil.invoke(str, request, response, "execute",
-				UserTableService.class, appContextUtil);
-
-	}
-	
-	@RequestMapping(value = "/systbl", method = RequestMethod.POST)
-	public String systbl(HttpServletRequest request,
-			HttpServletResponse response, @RequestBody String str) {
-		return ServiceUtil.invoke(str, request, response, "execute",
-				SysTableService.class, appContextUtil);
-
-	}
 }

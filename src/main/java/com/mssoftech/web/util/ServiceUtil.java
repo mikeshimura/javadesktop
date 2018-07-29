@@ -17,7 +17,6 @@ import org.seasar.util.exception.ParseRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mssoftech.javadesktop.service.LoginService;
 import com.mssoftech.javadesktop.util.AppContextUtil;
 import com.mssoftech.web.exception.SystemException;
 
@@ -31,7 +30,7 @@ public class ServiceUtil {
 			Method[] methods = clazz.getMethods();
 			Object target = appContextUtil.rootContext.getBean(clazz);
 			Object res = null;
-			Map params = createParams(str, clazz);
+			Map params = createParams(str);
 			for (Method method : methods) {
 				if (method.getName().equals(smethod)) {
 					res = method.invoke(target, params, request, response);
@@ -125,10 +124,10 @@ public class ServiceUtil {
 		return message;
 	}
 
-	private static Map createParams(String str, Class<LoginService> clazz) {
+	private static Map createParams(String str) {
 		Map params = (Map) JSON.decode(str);
 		params.put("startTimeStamp", CalenderUtil.getCurrentTime());
-		params.put("class", clazz.getSimpleName());
+		params.put("class", "Dummy");
 		return params;
 	}
 

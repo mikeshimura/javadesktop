@@ -37,23 +37,7 @@ public class DBFluteUtil {
 	static Boolean localenv = null;
 	static String LF = "\n";
 	
-	public static void clearAccessContext() {
-		AccessContext.clearAccessContextOnThread();
-		log.debug("ActionAccessContextIntercepter End");
-	}
 
-	public static void setUserProcessToAccessContext(String user, String process) {
-		AccessContext ac = AccessContext.getAccessContextOnThread();
-		ac.setAccessUser(user);
-		ac.setAccessProcess(process);
-	}
-	public static void setNewAccessContext(String user, String process) {
-		AccessContext ac = new AccessContext();
-		ac.setAccessUser(user);
-		ac.setAccessProcess(process);
-		AccessContext.setAccessContextOnThread(ac);
-		log.debug("ActionAccessContextIntercepter Begin");
-	}
 	public static synchronized HashMap getOpMap() {
 		if (_omap == null) {
 
@@ -84,31 +68,7 @@ public class DBFluteUtil {
 		return _omap2;
 	}
 
-	public static HashMap getJsCss(String contextPath, String[] js,
-			String[] css, String title, String[] jscmd) {
-		HashMap jsCss = new HashMap();
 
-		String[] jsSmart = {
-				"/js/sc/system/modules/ISC_Core.js",
-				"/js/sc/system/modules/ISC_Foundation.js",
-				// "/js/sc/system/modules/ISC_Calendar.js",
-				"/js/sc/system/modules/ISC_Containers.js",
-				"/js/sc/system/modules/ISC_Grids.js",
-				"/js/sc/system/modules/ISC_Forms.js",
-				"/js/sc/system/modules/ISC_DataBinding.js",
-				"/js/sc/skins/EnterpriseBlue/load_skin.js", "/js/json2.min.js" };
-		jsCss.put("js", new ArrayList());
-		jsCss.put("css", new ArrayList());
-		jsCss.put("jscmd", new ArrayList());
-		jsCss.put("jscmdh", "var isomorphicDir=\"" + contextPath + "/js/sc/\";"
-				+ "\n contextpath=\"" + contextPath + "\";");
-		jsCss.put("title", title);
-		putStrings(jsCss, "jscmd", jscmd);
-		putStrings(jsCss, "js", contextPath, jsSmart);
-		putStrings(jsCss, "js", contextPath, js);
-		putStrings(jsCss, "css", contextPath, css);
-		return jsCss;
-	}
 
 	public static void putStrings(HashMap map, String parameter,
 			String contextPath, String[] strings) {
@@ -134,9 +94,6 @@ public class DBFluteUtil {
 
 	public static HashMap setFetchResult(Object data, int status, int startRow,
 			int totalRows, Map params) {
-		if (params != null) {
-			putTreasureData(params);
-		}
 		HashMap response = getResponse(data, status, startRow, totalRows);
 		HashMap result = new HashMap();
 		result.put("response", response);
@@ -147,32 +104,6 @@ public class DBFluteUtil {
 		return setFetchResult(ar, 0, 0, ar.size(), params);
 	}
 
-	public static void putTreasureData(Map params) {
-		Timestamp endTime = CalenderUtil.getCurrentTime();
-		Timestamp startTime = (Timestamp) params.get("startTimeStamp");
-		if (startTime == null) {
-			return;
-		}
-		String sclass = (String) params.get("class");
-		String[] ssclass = { "" };
-		if (sclass != null) {
-			ssclass = sclass.split("\\.");
-		}
-		String operationType = (String) params.get("operationType");
-		Date start = new Date(startTime.getTime());
-		SimpleDateFormat format = CalenderUtil.getSdfTimestamp();
-		String sStart = format.format(start);
-
-		Long duration = endTime.getTime() - startTime.getTime();
-		System.out.println("@[development.ajax] {\"date\":\""
-				+ sStart.substring(0, 10) + "\",\"hour\":\""
-				+ sStart.substring(11, 13) + "\",\"min_sec\":\""
-				+ sStart.substring(14, 19) + "\",\"class\":\""
-				+ ssclass[ssclass.length - 1] + "\",\"opType\":\""
-				+ operationType + "\",\"duration\":" + duration.toString()
-				+ "}");
-
-	}
 
 	private static HashMap getResponse(Object data, int status, int startRow,
 			int totalRows) {
@@ -185,23 +116,7 @@ public class DBFluteUtil {
 		return response;
 	}
 
-	public static void removeMetaCommonColumns(Map<String, Object> resultMap,
-			HashMap columns, String excludeCat, String[] excludeColumns) {
-		for (Iterator<String> iterator = resultMap.keySet().iterator(); iterator
-				.hasNext();) {
-			String column = iterator.next();
-			String columnCat = (String) columns.get(column);
-			if (columnCat == null) {
-				iterator.remove();
-			} else if (excludeCat.contains(columnCat)) {
-				iterator.remove();
-			}
-		}
-		for (String c : excludeColumns) {
-			resultMap.remove(c);
-		}
 
-	}
 
 	public static String getSystemErrorJspPath() {
 		return "/system_error.jsp";
@@ -221,17 +136,7 @@ public class DBFluteUtil {
 		return hm;
 	}
 
-	public static void copyCommonRegData(Object old, Object upd)
-			throws IllegalAccessException, InvocationTargetException,
-			NoSuchMethodException {
-		String[] commonCols = new String[] { "registerDatetime",
-				"registerUser", "registerProcess" };
-		for (String col : commonCols) {
-			PropertyUtils.setSimpleProperty(upd, col,
-					PropertyUtils.getSimpleProperty(old, col));
-		}
 
-	}
 
 	public static void setCriteria(AbstractConditionQuery query, Map map)
 			 {
